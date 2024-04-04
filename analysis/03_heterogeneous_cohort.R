@@ -12,6 +12,7 @@
 #* Creation date: February 01 2024
 #* Authors:
 #* - David U. Garibay-Treviño, M.Sc.
+#* - Hawre Jalal, M.D., Ph.D.
 #* - Fernando Alarid-Escudero, Ph.D.
 
 # 01 Initial Setup --------------------------------------------------------
@@ -132,7 +133,7 @@ m_probs <- df_samp_probs %>%
 # Seed for reproducibility in random number generation
 set.seed(n_seed)
 
-#* Implement Multivariate NPS
+#* Run NPS using a mutivariate categorical distribution
 ##* Without continuous time approximation
 v_cat_life_table_heterog <- nps_nhppp(m_probs = m_probs,
                                       correction = "none")
@@ -224,3 +225,4 @@ ggplt_lifetable_comparison_heterog <- ggplot(data = df_heterog_samp,
         plot.caption  = element_text(size = title_size - 8),
         strip.text    = element_text(size = axis_text_size, face = "bold"))
 
+ggplt_lifetable_comparison_heterog

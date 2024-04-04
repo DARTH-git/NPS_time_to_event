@@ -34,14 +34,14 @@ folder. The examples are the following:
   cohort.
 - [`04_hazards_with_time_dependent_covariates.R`](https://github.com/DARTH-git/NPS_time_to_event/blob/main/analysis/04_hazards_with_time_dependent_covariates.R).
   Shows how the NPS method can be implemented to draw times to event
-  using discretized hazards derived from processes following hazard
-  proportional hazards with the following specification
+  using discretized hazards derived from processes following
+  proportional hazards with the next specification
   $h_i(t) = h_0(t) e^{(x_i(t)\beta)} = h_0(t) e^{((\alpha_0 + \alpha_1 t)\beta)}$,
   with $x_i(t) = \alpha_0 + \alpha_1 t$.
 - [`05_time_dependent_covariates_following_random_paths.R`](https://github.com/DARTH-git/NPS_time_to_event/blob/main/analysis/05_time_dependent_covariates_following_random_paths.R).
   Shows how the NPS method can be implemented to draw times to event
   using discretized hazards derived from processes following a
-  parametric baseline hazard with random covariates with the following
+  parametric baseline hazard with random covariates with the next
   specification
   $h_i(t) = h_0(t) e^{(x_i(t)\beta)} = h_0(t) e^{((\alpha_0 + \alpha_1 t)\beta)}$,
   with $x_i(t) = \alpha_0 + \alpha_1 y_i(t)$ where $y_i(t)$ follows a

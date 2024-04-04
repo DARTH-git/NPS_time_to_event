@@ -10,11 +10,10 @@ method of time to event for individual-level models*” manuscript
 
 This repository also provides a function to draw samples from a
 multivariate categorical distribution. This function has an `R` and a
-`Python` implementations, which are located in the
+`Python` implementations, which are located in
 [`R/nps_nhppp.R`](https://github.com/DARTH-git/NPS_time_to_event/blob/main/R/nps_nhppp.R)
-and the
-[`python/nps_nhppp.py`](https://github.com/DARTH-git/NPS_time_to_event/blob/main/python/nps_nhpp.py) paths,
-respectively.
+and
+[`python/nps_nhppp.py`](https://github.com/DARTH-git/NPS_time_to_event/blob/main/python/nps_nhpp.py), respectively.
 
 This repository contains the code used to execute all the examples using
 `R`, which are located inside the

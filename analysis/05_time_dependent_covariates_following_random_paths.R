@@ -34,6 +34,7 @@ library(data.table)
 library(flexsurv)
 library(LambertW)
 library(reshape2)
+library(patchwork)
 
 # Load function to implement multivariate categorical sampling
 source(file = "R/nps_nhppp.R")

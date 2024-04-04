@@ -167,10 +167,9 @@ out_nps <- nps_nhppp(m_probs = as.matrix(dt_paths_individuals_wide[, `1`:`101`])
 
 
 # Time to event (te) from random paths (rp)
-n_mean_te_rp     <-  mean(dt_out_nps$time_to_event)     # Expected value
-n_sd_te_rp       <-  sd(dt_out_nps$time_to_event)       # Standard deviation
-n_quantile_te_rp <-  quantile(dt_out_nps$time_to_event, # 95% CI
-                              probs = c(0.025, 0.975))
+n_mean_te_rp     <-  mean(out_nps)     # Expected value
+n_sd_te_rp       <-  sd(out_nps)       # Standard deviation
+n_quantile_te_rp <-  quantile(out_nps, probs = c(0.025, 0.975)) # 95% CI
 
 # 06 Plotting -------------------------------------------------------------
 

@@ -1,4 +1,5 @@
-#* Title:  Ex. 04 - Draw time to event from hazards with time-dependent covariates
+#* Title:  Ex. 04 - Draw time to event from hazards with time-dependent 
+#*         covariates
 #* 
 #* Code function: 
 #*    This code corresponds to the fourth example of the NPS manuscript.
@@ -13,6 +14,7 @@
 #* Creation date: February 02 2024
 #* Authors:
 #* - David U. Garibay-Treviño, M.Sc.
+#* - Hawre Jalal, M.D., Ph.D.
 #* - Fernando Alarid-Escudero, Ph.D.
 
 # 01 Initial Setup --------------------------------------------------------
@@ -233,7 +235,8 @@ v_time_to_event_gompertz <- sample(x = time_var_cov,
                                    replace = TRUE)
 
 # Add continous time approximation
-v_time_to_event_gompertz <-  v_time_to_event_gompertz + runif(n = length(v_time_to_event_gompertz))
+v_time_to_event_gompertz <-  v_time_to_event_gompertz + 
+  runif(n = length(v_time_to_event_gompertz))
 
 # Remove seed
 set.seed(NULL)
@@ -295,8 +298,9 @@ v_time_to_event_weibull <- sample(x       = time_var_cov,
                                   prob    = dt_weibull_hazard_long$f, 
                                   replace = TRUE)
 
-# Add continous time approximation
-v_time_to_event_weibull <-  v_time_to_event_weibull + runif(n = length(v_time_to_event_weibull))
+# Add continuous time approximation
+v_time_to_event_weibull <-  v_time_to_event_weibull + 
+  runif(n = length(v_time_to_event_weibull))
 
 # Remove seed
 set.seed(NULL)

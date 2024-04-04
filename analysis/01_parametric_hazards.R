@@ -13,6 +13,7 @@
 #* Creation date: February 01 2024
 #* Authors:
 #* - David U. Garibay-Treviño, M.Sc.
+#* - Hawre Jalal, M.D., Ph.D.
 #* - Fernando Alarid-Escudero, Ph.D.
 
 # 01 Initial Setup --------------------------------------------------------
@@ -64,7 +65,7 @@ calc_ev_nps <- function(n_samples, v_probs){
   return(mean(v_time_to_event_rates_cat))
 }
 
-# Calculate expected value using NPS approach and continous time approximation
+# Calculate expected value using NPS approach and continuous time approximation
 calc_ev_nps_corr <- function(n_samples, v_probs){
   
   # Sample times to event
@@ -95,7 +96,8 @@ ev_exp           <- 1/par_exp_rate # Analytical expected value
 var_exp          <- ev_exp^2       # Analytical variance
 
 # Get instantaneous probability of ocurrence
-v_prob_exp_rates <- pexp(q = 1:151, rate = par_exp_rate) - pexp(q = 0:150, rate = par_exp_rate)
+v_prob_exp_rates <- pexp(q = 1:151, rate = par_exp_rate) -
+  pexp(q = 0:150, rate = par_exp_rate)
 
 
 # Set seed for reproducibility in random number generation
@@ -220,4 +222,3 @@ df_summary <- tibble::tibble(
 
 # Check results table
 df_summary
-

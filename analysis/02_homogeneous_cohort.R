@@ -12,6 +12,7 @@
 #* Creation date: February 01 2024
 #* Authors:
 #* - David U. Garibay-Treviño, M.Sc.
+#* - Hawre Jalal, M.D., Ph.D.
 #* - Fernando Alarid-Escudero, Ph.D.
 
 # 01 Initial Setup --------------------------------------------------------
@@ -82,7 +83,7 @@ df_le_lifetable <- df_lifetable %>%
 le_lifetable_homog <- df_le_lifetable[df_le_lifetable$Sex == "Total", ]$le
 
 
-# 06 Calculate life expectancy using nps method ---------------------------
+# 06 Calculate life expectancy using the NPS method ---------------------------
 
 # Filter to have homogeneous population
 df_lifetable_homog <- df_lifetable %>%
@@ -175,3 +176,5 @@ ggplt_lifetable_comparison_homog <- ggplot(data    = df_lifetable_samp,
         plot.title    = element_text(size = title_size - 4, hjust = 0.5),
         plot.subtitle = element_text(size = title_size - 6, hjust = 0.5),
         plot.caption  = element_text(size = title_size - 8))
+
+ggplt_lifetable_comparison_homog

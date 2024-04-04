@@ -139,7 +139,7 @@ dtb_paths_individuals <- create_time_varying_covariate(n_ind    = n_ind,
                                                        n_cycles = n_cycles,
                                                        ourDrift = ourDrift)
 
-set.seed(NULL)
+set.seed(1234)
 
 
 # Obtain time-dependent hazards from indvidual-specific random paths
@@ -163,7 +163,7 @@ dt_paths_individuals_wide[, `101` := 1 - dtb_paths_individuals[Time == 100, `F`]
 # Sample time to event for all individuals
 out_nps <- nps_nhppp(m_probs = as.matrix(dt_paths_individuals_wide[, `1`:`101`]),
                      v_categories = seq(0, 100),
-                     correction = "none")
+                     correction = "uniform")
 
 
 # 05 Summarize results ----------------------------------------------------
@@ -173,6 +173,8 @@ out_nps <- nps_nhppp(m_probs = as.matrix(dt_paths_individuals_wide[, `1`:`101`])
 n_mean_te_rp     <-  mean(out_nps)     # Expected value
 n_sd_te_rp       <-  sd(out_nps)       # Standard deviation
 n_quantile_te_rp <-  quantile(out_nps, probs = c(0.025, 0.975)) # 95% CI
+
+set.seed(NULL)
 
 # 06 Plotting -------------------------------------------------------------
 

@@ -1,4 +1,5 @@
-#* Title:  Ex. 04 - Draw time to event from hazards with time-dependent covariates following random paths
+#* Title:  Ex. 05 - Draw time to event from hazards with time-dependent 
+#*         covariates following random paths
 #* 
 #* Code function: 
 #*    This code corresponds to the fifth example of the NPS manuscript.
@@ -12,6 +13,7 @@
 #* Creation date: February 02 2024
 #* Authors:
 #* - David U. Garibay-Treviño, M.Sc.
+#* - Hawre Jalal, M.D., Ph.D.
 #* - Fernando Alarid-Escudero, Ph.D.
 
 

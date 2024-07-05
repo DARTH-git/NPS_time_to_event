@@ -28,12 +28,15 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(tibble)
-
+library(microbenchmark)
   
 # 02 Define general parameters --------------------------------------------
 
-#´ Number of samples to draw from the life table
+# Number of samples to draw from the life table
 n_samp_life_tables <- 1e5
+
+# Number of iterations for microbenchmarking
+n_samp_iter_life_tables <- 100
 
 # Seed for reproducibility in random number generation
 n_seed <- 10242022
@@ -43,10 +46,10 @@ options(pillar.sigfig = 4)
 
 # 03 Load base data -------------------------------------------------------
 
-#' Yearly USA data, from 2000 to 2019, 
-#' Mortality rate for males, females and total
-#' Obtained from The Human Mortality Database:
-#' https://www.mortality.org/cgi-bin/hmd/country.php?cntr=USA&level=1
+#* Yearly USA data, from 2000 to 2019, 
+#* Mortality rate for males, females and total
+#* Obtained from The Human Mortality Database:
+#* https://www.mortality.org/cgi-bin/hmd/country.php?cntr=USA&level=1
 load("data/all_cause_mortality.rda")
 
 
@@ -83,7 +86,7 @@ df_le_lifetable <- df_lifetable %>%
 le_lifetable_homog <- df_le_lifetable[df_le_lifetable$Sex == "Total", ]$le
 
 
-# 06 Calculate life expectancy using the NPS method ---------------------------
+# 06 Calculate life expectancy using nps method ---------------------------
 
 # Filter to have homogeneous population
 df_lifetable_homog <- df_lifetable %>%
@@ -92,27 +95,46 @@ df_lifetable_homog <- df_lifetable %>%
 # Set seed for reproducibility in random number generation
 set.seed(n_seed)
 
-#' Sample ages to death from a categorical sampling
+#* Sample ages to death from a categorical sampling
 v_cat_life_table_homog <- sample(x       = df_lifetable_homog$Age,
                                  size    = n_samp_life_tables,
                                  prob    = df_lifetable_homog$p_t,
                                  replace = TRUE)
 
-#' Create vector of drawings following a uniform distribution
+#* Create vector of drawings following a uniform distribution
 v_unif_life_table_homog <- runif(n = n_samp_life_tables, min = 0, max = 1)
+
+
+#* Add this vector to the categorical sampling outputs
+v_cat_life_table_corr_homog <- v_cat_life_table_homog + v_unif_life_table_homog
+
+#* Life expectancy without continuous time correction
+le_homog_uncorr <- mean(v_cat_life_table_homog)
+
+#* Life expectancy with correction
+le_homog_corr <- mean(v_cat_life_table_corr_homog)
+
+# Measure mean execution time
+## Without continuous time correction
+l_mbench_homog_uncorr <- microbenchmark::microbenchmark(
+  sample(x       = df_lifetable_homog$Age,
+         size    = n_samp_life_tables,
+         prob    = df_lifetable_homog$p_t,
+         replace = TRUE),
+  times = n_samp_iter_life_tables,
+  unit = "ms")
+
+## With continuous time correction
+l_mbench_homog_corr <- microbenchmark::microbenchmark(
+  sample(x       = df_lifetable_homog$Age,
+         size    = n_samp_life_tables,
+         prob    = df_lifetable_homog$p_t,
+         replace = TRUE) + runif(n = n_samp_life_tables, min = 0, max = 1),
+  times = n_samp_iter_life_tables,
+  unit = "ms")
 
 # Remove seed
 set.seed(NULL)
-
-#' Add this vector to the categorical sampling outputs
-v_cat_life_table_corr_homog <- v_cat_life_table_homog + v_unif_life_table_homog
-
-#´ Life expectancy without continuous time correction
-le_homog_uncorr <- mean(v_cat_life_table_homog)
-
-#´ Life expectancy with correction
-le_homog_corr <- mean(v_cat_life_table_corr_homog)
-
 
 # 07 Summarize results ----------------------------------------------------
 
@@ -131,7 +153,7 @@ df_summary
 
 # 08 Plotting -------------------------------------------------------------
 
-#' Create dataset for plotting
+#* Create dataset for plotting
 df_lifetable_samp <- data.frame(
   age_death = v_cat_life_table_corr_homog,
   type = "NPS Homogeneous"
@@ -143,7 +165,7 @@ legend_text_size  <- 14
 legend_title_size <- 14
 title_size        <- 14
 
-#' Generate comparison plot (Issues with plot quality)
+#* Generate comparison plot (Issues with plot quality)
 ggplt_lifetable_comparison_homog <- ggplot(data    = df_lifetable_samp,
                                            mapping = aes(x = age_death)) + 
   geom_histogram(mapping = aes(y = after_stat(density),
@@ -176,5 +198,3 @@ ggplt_lifetable_comparison_homog <- ggplot(data    = df_lifetable_samp,
         plot.title    = element_text(size = title_size - 4, hjust = 0.5),
         plot.subtitle = element_text(size = title_size - 6, hjust = 0.5),
         plot.caption  = element_text(size = title_size - 8))
-
-ggplt_lifetable_comparison_homog

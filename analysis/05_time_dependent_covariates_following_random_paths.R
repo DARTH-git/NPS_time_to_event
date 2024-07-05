@@ -1,5 +1,4 @@
-#* Title:  Ex. 05 - Draw time to event from hazards with time-dependent 
-#*         covariates following random paths
+#* Title:  Ex. 04 - Draw time to event from hazards with time-dependent covariates following random paths
 #* 
 #* Code function: 
 #*    This code corresponds to the fifth example of the NPS manuscript.
@@ -34,6 +33,8 @@ library(data.table)
 library(flexsurv)
 library(LambertW)
 library(reshape2)
+library(microbenchmark)
+
 library(patchwork)
 
 # Load function to implement multivariate categorical sampling
@@ -55,11 +56,14 @@ n_ind    <-  1000 # Number of simulated individuals
 n_cycles <-  100  # Number of cycles
 ourDrift <-  0.5
 
+#* Number of iterations for microbenchmarking in time-dependent covariates 
+#* examples
+n_iter_time_var_cov <- 100
+
 # Seed for reproducibility in random number generation
 n_seed <- 10242022
 
 # 03 Define required functions --------------------------------------------
-
 
 # Define random path function
 create_time_varying_covariate <- function(n_ind    = 100,
@@ -98,19 +102,16 @@ compute_time_varying_hazard_linear_3 <- function(hazard0,
 }
 
 
-# 04 Draw time to events --------------------------------------------------
+# 04 Draw times to events --------------------------------------------------
 
 # Set seed for reproducibility
-set.seed(1234) 
+set.seed(n_seed) 
 
 # Sample from Weibull baseline hazard (h_0)
 hazard0 <- matrix(flexsurv::hweibull(x     = 1:n_cycles, 
                                      shape = n_weib_shape, 
                                      scale = n_weib_scale), 
                   ncol = 1)
-
-# Set seed for reproducibility
-set.seed(1234)
 
 # Compute values of the hazard based on a range of covariate values
 weibull_hazard <- compute_time_varying_hazard_linear_3(hazard0      = hazard0,
@@ -134,13 +135,9 @@ dt_weibull_hazard_long[, Covariate := Covariate - 1]
 setkey(dt_weibull_hazard_long, Time, Covariate)
 
 # Create time varying covariate, y_i(t)
-set.seed(1234)
 dtb_paths_individuals <- create_time_varying_covariate(n_ind    = n_ind,
                                                        n_cycles = n_cycles,
                                                        ourDrift = ourDrift)
-
-set.seed(1234)
-
 
 # Obtain time-dependent hazards from indvidual-specific random paths
 dtb_paths_individuals[, `h(t)` := dt_weibull_hazard_long[
@@ -163,8 +160,16 @@ dt_paths_individuals_wide[, `101` := 1 - dtb_paths_individuals[Time == 100, `F`]
 # Sample time to event for all individuals
 out_nps <- nps_nhppp(m_probs = as.matrix(dt_paths_individuals_wide[, `1`:`101`]),
                      v_categories = seq(0, 100),
-                     correction = "uniform")
+                     correction = "none")
 
+# Measure mean execution time
+l_mbench_random_path <- microbenchmark::microbenchmark(
+  nps_nhppp(m_probs = as.matrix(dt_paths_individuals_wide[, 2:102]), correction = "uniform"),
+  times = n_iter_time_var_cov,
+  unit = "ms")
+
+# Remove seed
+set.seed(NULL)
 
 # 05 Summarize results ----------------------------------------------------
 
@@ -172,9 +177,10 @@ out_nps <- nps_nhppp(m_probs = as.matrix(dt_paths_individuals_wide[, `1`:`101`])
 # Time to event (te) from random paths (rp)
 n_mean_te_rp     <-  mean(out_nps)     # Expected value
 n_sd_te_rp       <-  sd(out_nps)       # Standard deviation
-n_quantile_te_rp <-  quantile(out_nps, probs = c(0.025, 0.975)) # 95% CI
+n_quantile_te_rp <-  quantile(out_nps, # 95% CI
+                              probs = c(0.025, 0.975))
 
-set.seed(NULL)
+# hist(out_nps)
 
 # 06 Plotting -------------------------------------------------------------
 

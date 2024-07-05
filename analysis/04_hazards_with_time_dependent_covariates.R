@@ -1,5 +1,4 @@
-#* Title:  Ex. 04 - Draw time to event from hazards with time-dependent 
-#*         covariates
+#* Title:  Ex. 04 - Draw time to event from hazards with time-dependent covariates
 #* 
 #* Code function: 
 #*    This code corresponds to the fourth example of the NPS manuscript.
@@ -34,6 +33,7 @@ library(data.table)
 library(flexsurv)
 library(LambertW)
 library(reshape2)
+library(microbenchmark)
 
 # Load function to implement multivariate categorical sampling
 source(file = "R/nps_nhppp.R")
@@ -51,8 +51,12 @@ time_var_cov <- seq(0, 100)
 # Sample size
 n_samp <- 1e6
 
+# Number of iterations for microbenchmarking in time-dependent covariates examples
+n_iter_time_var_cov <- 100
+
 # Seed for reproducibility in random number generation
 n_seed <- 10242022
+
 
 # 03 Define required functions --------------------------------------------
 
@@ -193,8 +197,14 @@ ev_exp_time_af <- mean(v_exp_time)
 ## NPS method
 ev_exp_time_nps <- mean(v_time_to_event_random_path)
 
-ev_exp_time_af
-ev_exp_time_nps
+# Measure mean execution time
+l_mbench_tvar_exp <- microbenchmark::microbenchmark(
+  sample(x = 0:100,  
+         size = 1e6,  
+         prob = dt_hazard_long$f,  
+         replace = TRUE),
+  times = n_iter_time_var_cov,
+  unit = "ms")
 
 ## 04.02 Gompertz baseline hazard ------------------------------------------
 
@@ -235,8 +245,7 @@ v_time_to_event_gompertz <- sample(x = time_var_cov,
                                    replace = TRUE)
 
 # Add continous time approximation
-v_time_to_event_gompertz <-  v_time_to_event_gompertz + 
-  runif(n = length(v_time_to_event_gompertz))
+v_time_to_event_gompertz <-  v_time_to_event_gompertz + runif(n = length(v_time_to_event_gompertz))
 
 # Remove seed
 set.seed(NULL)
@@ -256,8 +265,14 @@ ev_gomp_time_af <- mean(v_gomp_time)
 ## Proposed approach
 ev_gomp_time_nps <- mean(v_time_to_event_gompertz)
 
-ev_gomp_time_af
-ev_gomp_time_nps
+# Measure mean execution time
+l_mbench_tvar_gomp <- microbenchmark::microbenchmark(
+  sample(x = 0:100, 
+         size = 1e6, 
+         prob = dt_gomp_hazard_long$f, 
+         replace = TRUE) + runif(n = length(v_time_to_event_gompertz)),
+  times = n_iter_time_var_cov,
+  unit = "ms")
 
 ## 04.03 Weibull baseline hazard -------------------------------------------
 
@@ -298,12 +313,9 @@ v_time_to_event_weibull <- sample(x       = time_var_cov,
                                   prob    = dt_weibull_hazard_long$f, 
                                   replace = TRUE)
 
-# Add continuous time approximation
+# Add continous time approximation
 v_time_to_event_weibull <-  v_time_to_event_weibull + 
   runif(n = length(v_time_to_event_weibull))
-
-# Remove seed
-set.seed(NULL)
 
 # Obtain times to event following analytical formula
 v_weibull_time <- inv_weibull_time(n_samp  = n_samp,
@@ -320,9 +332,17 @@ ev_weibull_time_af <- mean(v_weibull_time)
 ## Proposed approach
 ev_weibull_time_nps <- mean(v_time_to_event_weibull)
 
+# Measure mean execution time
+l_mbench_tvar_weib <- microbenchmark::microbenchmark(
+  sample(x = 0:100, 
+         size = 1e6, 
+         prob = dt_weibull_hazard_long$f, 
+         replace = T) + runif(n = length(v_time_to_event_weibull)),
+  times = n_iter_time_var_cov,
+  unit = "ms")
 
-ev_weibull_time_af
-ev_weibull_time_nps
+# Remove seed
+set.seed(NULL)
 
 # 05 Summarize results ----------------------------------------------------
 

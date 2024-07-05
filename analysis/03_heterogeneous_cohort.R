@@ -28,6 +28,7 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(tibble)
+library(microbenchmark)
 
 # Load function to implement multivariate categorical sampling
 source(file = "R/nps_nhppp.R")
@@ -35,11 +36,15 @@ source(file = "R/nps_nhppp.R")
 
 # 02 Define general parameters --------------------------------------------
 
-#´ Number of samples to draw from the life table
+# Number of samples to draw from the life table
 n_samp_life_tables <- 1e5
 
-#' Number of samples, by sex, to draw from the life table
+# Number of samples, by sex, to draw from the life table
 n_samp_by_sex <- 1e5
+
+# Number of iterations for microbenchmarking
+n_samp_iter_life_tables <- 100
+
 
 
 # Seed for reproducibility in random number generation
@@ -100,7 +105,7 @@ v_samp_sex <- c("Male", "Female")
 # Filter to have heterogeneous population
 df_lifetable_heterog <- df_lifetable %>%
   filter(Sex != "Total") %>% 
-  select(Year, Sex, Age, p_t) %>% 
+  dplyr::select(Year, Sex, Age, p_t) %>% 
   # Normalize probabilities by sex
   group_by(Sex) %>% 
   # Normalize instantaneous probabilities by sex
@@ -127,13 +132,13 @@ df_samp_probs <- df_samp_raw %>%
 
 #* Extract probability matrix from `df_samp_probs`
 m_probs <- df_samp_probs %>% 
-  select(-Year, -Sex) %>% 
+  dplyr::select(-Year, -Sex) %>% 
   as.matrix()
 
 # Seed for reproducibility in random number generation
 set.seed(n_seed)
 
-#* Run NPS using a mutivariate categorical distribution
+#* Implement Multivariate NPS
 ##* Without continuous time approximation
 v_cat_life_table_heterog <- nps_nhppp(m_probs = m_probs,
                                       correction = "none")
@@ -161,12 +166,27 @@ df_le_nps_heterog <- df_heterog_samp %>%
             le_corr = mean(age_death_corr)) %>% 
   ungroup()
 
-# Extract values
-le_nps_fem_uncorr <- df_le_nps_heterog[df_le_nps_heterog$Sex == "Female", ]$le
-le_nps_male_uncorr <- df_le_nps_heterog[df_le_nps_heterog$Sex == "Male", ]$le
 
-le_nps_fem_corr   <- df_le_nps_heterog[df_le_nps_heterog$Sex == "Female", ]$le_corr
-le_nps_male_corr   <- df_le_nps_heterog[df_le_nps_heterog$Sex == "Male", ]$le_corr
+# Extract values
+le_nps_fem_uncorr  <- filter(df_le_nps_heterog, Sex == "Female")$le
+le_nps_male_uncorr <- filter(df_le_nps_heterog, Sex == "Male")$le
+
+le_nps_fem_corr   <- filter(df_le_nps_heterog, Sex == "Female")$le_corr
+le_nps_male_corr   <- filter(df_le_nps_heterog, Sex == "Male")$le_corr
+
+
+# Measure mean execution time
+## Without continuous time correction
+l_mbench_heterog_uncorr <- microbenchmark::microbenchmark(
+  nps_nhppp(m_probs = m_probs, correction = "none"),
+  times = n_samp_iter_life_tables,
+  unit = "ms")
+
+## With continuous time correction
+l_mbench_heterog_corr <- microbenchmark::microbenchmark(
+  nps_nhppp(m_probs = m_probs, correction = "uniform"),
+  times = n_samp_iter_life_tables,
+  unit = "ms")
 
 # 07 Summarize results ----------------------------------------------------
 
@@ -225,4 +245,3 @@ ggplt_lifetable_comparison_heterog <- ggplot(data = df_heterog_samp,
         plot.caption  = element_text(size = title_size - 8),
         strip.text    = element_text(size = axis_text_size, face = "bold"))
 
-ggplt_lifetable_comparison_heterog

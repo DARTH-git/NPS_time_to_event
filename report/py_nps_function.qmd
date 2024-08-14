@@ -1,5 +1,5 @@
 ---
-title: Definition of the NPS function in R
+title: Definition of the NPS function in python
 author:
   - David Garibay, M.P.P.^[Health Research Consortium (CISIDAT), Cuernavaca, Morelos, Mexico.]
   - Hawre Jalal, MD, Ph.D.^[School of Epidemiology and Public Health, Faculty of Medicine, University of Ottawa, Ottawa, ON, CA.]

@@ -101,7 +101,7 @@ v_cat_life_table_homog <- sample(x       = df_lifetable_homog$Age,
                                  prob    = df_lifetable_homog$p_t,
                                  replace = TRUE)
 
-#* Create vector of drawings following a uniform distribution
+#* Create vector with draws from a uniform distribution
 v_unif_life_table_homog <- runif(n = n_samp_life_tables, min = 0, max = 1)
 
 

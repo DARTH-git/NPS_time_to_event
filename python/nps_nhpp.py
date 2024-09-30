@@ -95,7 +95,10 @@ def nps_nhpp(a_probs, correction, a_categories=None):
     corresponding_values = a_categories[positions]
     
     if correction == "uniform":
-      corresponding_values = corresponding_values + a_unif_probs
+      
+      unif_corr = np.vstack(np.random.uniform(size = a_samp_size))
+      
+      corresponding_values = corresponding_values + unif_corr
     
     return corresponding_values
 

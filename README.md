@@ -1,7 +1,7 @@
 # README
 
 
-# Supplementary code with examples using nonparametric sampling (NPS) to draw times to event
+# Supplementary code with examples using a nonparametric sampling (NPS) method to draw times to event
 
 This repository contains the code used to replicates examples 1 to 5
 contained in the “*A computationally efficient nonparametric sampling

@@ -7,26 +7,28 @@ def nps_nhpp(a_probs, correction, a_categories=None):
     
     Parameters:
     -----------
-    a_probs (array): Array filled with independent and equally-length probability distributions.
-    correction (str): String defining whether to a random variable between 0 and 1 to approximate continous time ("uniform") or no modification at all after performing the sample ("none").
-    a_categories (array): (Optional) Array defining the names of the categories to sample.
+    a_probs (array): Array filled with independent and equally-length 
+    probability distributions.
+    correction (str): String defining whether to a random variable between 0 
+    and 1 to approximate continous time ("uniform") or no modification at all 
+    after performing the sample ("none").
+    a_categories (array): (Optional) Array defining the names of the 
+    categories to sample.
     
     Returns:
     -----------
-    numpy.array: Array filled with the sampled categories for all the probability distributions.
+    numpy.array: Array filled with the sampled categories for all the 
+    probability distributions.
     
     Example:
     -----------
     import numpy as np
     import scipy.stats as stats
     
-    # Number of repetitions
+    # Number of samples
     n_samp = 100
     
-    # define random numbers
-    a_unif_samp = np.random.uniform(size = n_rep*2)
-    
-    # Create an array filled with categories
+    # Create an array filled with categories between 1 and 101
     a_categories = np.arange(1, 101)
     
     # Parameters of normal distribution
@@ -45,13 +47,19 @@ def nps_nhpp(a_probs, correction, a_categories=None):
     ## Second version
     v_norm_PDF_norm_2 = v_disc_PDF_norm_2/sum(v_disc_PDF_norm_2)
     
+    # Join v_norm_PDF_norm_1 and v_norm_PDF_norm_2 into a sinlge array
     a_PDF_1_2 = np.array([v_norm_PDF_norm_1, v_norm_PDF_norm_2])
     
+    # Randomly sample 0s and 1s
     a_choice = np.random.choice(a = [0, 1], size = n_samp, replace = True, p = [0.5, 0.5])
     
+    # Use values present in a_choice to extract either v_norm_PDF_norm_1 or
+    # v_norm_PDF_norm_1 and stack them into an array 
     a_probs = np.stack(arrays = a_PDF_1_2[a_choice], axis = 0)
     
-    nps_nhpp(a_probs= a_probs, correction="none")
+    # Run the nps_nhpp function to sample times to events from the arrays
+    # of probabilities present in a_probs
+    nps_nhpp(a_probs= a_probs, correction="uniform")
     -----------
     """
     valid_correction = {'none', 'uniform'}

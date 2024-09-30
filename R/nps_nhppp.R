@@ -65,7 +65,7 @@ nps_nhppp <- function(m_probs,
                                           ties.method = "first")]
   
   if (correction == "uniform") {
-    v_time_to_event <- v_time_to_event + v_unif
+    v_time_to_event <- v_time_to_event + runif(n_samp, min = 0, max = 1)
   }
   return(v_time_to_event)
 

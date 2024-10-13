@@ -2,7 +2,7 @@
 title: Example 1 using R
 subtitle: Time to event from parametric hazards
 author:
-  - David Garibay, M.P.P.^[Health Research Consortium (CISIDAT), Cuernavaca, Morelos, Mexico.]
+  - David Garibay, M.P.P.^[School of Epidemiology and Public Health, Faculty of Medicine, University of Ottawa, Ottawa, ON, CA.]
   - Hawre Jalal, MD, Ph.D.^[School of Epidemiology and Public Health, Faculty of Medicine, University of Ottawa, Ottawa, ON, CA.]
   - Fernando Alarid-Escudero, Ph.D.^[Department of Health Policy, Stanford University School of Medicine, Stanford, CA, USA.] ^[Center for Health Policy, Freeman Spogli Institute, Stanford University, Stanford, CA, USA.]
 format: pdf

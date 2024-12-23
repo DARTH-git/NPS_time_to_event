@@ -140,8 +140,8 @@ v_samp_sex <- c("Male", "Female")
 
 # Filter to have heterogeneous population
 df_lifetable_heterog <- df_lifetable %>%
-  filter(Sex != "Total") %>% 
-  select(Year, Sex, Age, p_t) %>% 
+  dplyr::filter(Sex != "Total") %>% 
+  dplyr::select(Year, Sex, Age, p_t) %>% 
   # Normalize probabilities by sex
   group_by(Sex) %>% 
   # Normalize instantaneous probabilities by sex
@@ -168,7 +168,7 @@ df_samp_probs <- df_samp_raw %>%
 
 #* Extract probability matrix from `df_samp_probs`
 m_probs <- df_samp_probs %>% 
-  select(-Year, -Sex) %>% 
+  dplyr::select(-Year, -Sex) %>% 
   as.matrix()
 
 #* Implement Multivariate NPS

@@ -197,6 +197,10 @@ out_nps <- nps_nhppp(
   v_categories = seq(0, 100),
   correction = "none")
 
+
+# Expected time to event
+ev_time_to_event <- mean(out_nps)
+
 # Measure mean execution time
 l_mbench_random_path <- microbenchmark::microbenchmark(
   nps_nhppp(m_probs    = as.matrix(dt_paths_individuals_wide[, 2:102]), 

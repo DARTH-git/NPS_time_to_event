@@ -238,7 +238,7 @@ l_mbench_tvar_exp <- microbenchmark::microbenchmark(
 
 ## 04.02 Gompertz baseline hazard ------------------------------------------
 
-# Define general parameters for the Weibull baseline hazard
+# Define general parameters for the Gompertz baseline hazard
 shape <- 0.1
 rate <- 0.001
 

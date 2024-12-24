@@ -208,11 +208,27 @@ l_mbench_heterog_uncorr <- microbenchmark::microbenchmark(
   times = n_samp_iter_life_tables,
   unit = "ms")
 
+#* The default output of microbenchmark is in nanoseconds (1/1e-9).
+#* The results are converted into miliseconds
+t_m_heterog_u  <- format(round(mean(l_mbench_heterog_uncorr$time/1e6), 2), 
+                                nsmall = 2)
+
+t_CI_heterog_u <- format(round(quantile(l_mbench_heterog_uncorr$time/1e6, probs = c(0.025, 0.975)), 2), 
+                                nsmall = 2)
+
 ## With continuous time correction
 l_mbench_heterog_corr <- microbenchmark::microbenchmark(
   nps_nhppp(m_probs = m_probs, correction = "uniform"),
   times = n_samp_iter_life_tables,
   unit = "ms")
+
+#* The default output of microbenchmark is in nanoseconds (1/1e-9).
+#* The results are converted into miliseconds
+t_m_heterog_c  <- format(round(mean(l_mbench_heterog_corr$time/1e6), 2), 
+                                nsmall = 2)
+
+t_CI_heterog_c <- format(round(quantile(l_mbench_heterog_corr$time/1e6, probs = c(0.025, 0.975)), 2), 
+                                nsmall = 2)
 
 # Remove seed
 set.seed(NULL)

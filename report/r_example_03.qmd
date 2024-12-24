@@ -206,7 +206,7 @@ le_nps_male_corr   <- filter(df_le_nps_heterog, Sex == "Male")$le_corr
 l_mbench_heterog_uncorr <- microbenchmark::microbenchmark(
   nps_nhppp(m_probs = m_probs, correction = "none"),
   times = n_samp_iter_life_tables,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -220,7 +220,7 @@ t_CI_heterog_u <- format(round(quantile(l_mbench_heterog_uncorr$time/1e6, probs 
 l_mbench_heterog_corr <- microbenchmark::microbenchmark(
   nps_nhppp(m_probs = m_probs, correction = "uniform"),
   times = n_samp_iter_life_tables,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds

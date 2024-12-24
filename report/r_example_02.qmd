@@ -165,7 +165,16 @@ l_mbench_homog_uncorr <- microbenchmark::microbenchmark(
          prob    = df_lifetable_homog$p_t,
          replace = TRUE),
   times = n_samp_iter_life_tables,
-  unit = "ms")
+  unit = "ns")
+
+
+#* The default output of microbenchmark is in nanoseconds (1/1e-9).
+#* The results are converted into miliseconds
+t_m_homog_u  <- format(round(mean(l_mbench_homog_uncorr$time/1e6), 2), 
+                                nsmall = 2)
+
+t_CI_homog_u <- format(round(quantile(l_mbench_homog_uncorr$time/1e6, probs = c(0.025, 0.975)), 2), 
+                                nsmall = 2)
 
 ## With continuous time correction
 l_mbench_homog_corr <- microbenchmark::microbenchmark(
@@ -174,7 +183,16 @@ l_mbench_homog_corr <- microbenchmark::microbenchmark(
          prob    = df_lifetable_homog$p_t,
          replace = TRUE) + runif(n = n_samp_life_tables, min = 0, max = 1),
   times = n_samp_iter_life_tables,
-  unit = "ms")
+  unit = "ns")
+
+
+#* The default output of microbenchmark is in nanoseconds (1/1e-9).
+#* The results are converted into miliseconds
+t_m_homog_c  <- format(round(mean(l_mbench_homog_corr$time/1e6), 2), 
+                                nsmall = 2)
+
+t_CI_homog_c <- format(round(quantile(l_mbench_homog_corr$time/1e6, probs = c(0.025, 0.975)), 2), 
+                                nsmall = 2)
 
 
 # Remove seed

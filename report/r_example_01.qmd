@@ -222,7 +222,7 @@ ev_exp_uncorr <- round(ev_exp_uncorr, 2)
 l_mbench_exp_uncorr <- microbenchmark::microbenchmark(
   calc_ev_nps(n_samples = n_samples, v_probs = v_prob_exp_rates),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -237,7 +237,7 @@ t_CI_exp_u  <- format(round(quantile(x = l_mbench_exp_uncorr$time/1e6,
 l_mbench_exp_corr <- microbenchmark::microbenchmark(
   calc_ev_nps_corr(n_samples = n_samples, v_probs = v_prob_exp_rates),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -294,7 +294,7 @@ ev_gamma_uncorr <- round(ev_gamma_uncorr, 2)
 l_mbench_gamma_uncorr <- microbenchmark::microbenchmark(
   calc_ev_nps(n_samples = n_samples, v_probs = v_prob_gamma_rates),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -309,7 +309,7 @@ t_CI_gamma_u <- format(round(quantile(l_mbench_gamma_uncorr$time/1e6,
 l_mbench_gamma_corr <- microbenchmark::microbenchmark(
   calc_ev_nps_corr(n_samples = n_samples, v_probs = v_prob_gamma_rates),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -374,7 +374,7 @@ ev_lnorm_uncorr <- round(ev_lnorm_uncorr, 2)
 l_mbench_lnorm_uncorr <- microbenchmark::microbenchmark(
   calc_ev_nps(n_samples = n_samples, v_probs = v_prob_lnorm_rates),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -389,7 +389,7 @@ t_CI_lnorm_u <- format(round(quantile(l_mbench_lnorm_uncorr$time/1e6,
 l_mbench_lnorm_corr <- microbenchmark::microbenchmark(
   calc_ev_nps_corr(n_samples = n_samples, v_probs = v_prob_lnorm_rates),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -470,7 +470,7 @@ l_mbench_exp_param <- microbenchmark::microbenchmark(
   a = mean(rexp(n    = n_samples, 
                 rate = par_exp_rate)),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -486,7 +486,7 @@ l_mbench_gamma_param <- microbenchmark::microbenchmark(
                   shape = par_gamma_shape,
                   rate  = par_gamma_rate)),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
@@ -502,7 +502,7 @@ l_mbench_lnorm_param <- microbenchmark::microbenchmark(
               meanlog = par_lnorm_meanlog,
               sdlog   = par_lnorm_sdlog)),
   times = n_reps_microbench,
-  unit = "ms")
+  unit = "ns")
 
 #* The default output of microbenchmark is in nanoseconds (1/1e-9).
 #* The results are converted into miliseconds
